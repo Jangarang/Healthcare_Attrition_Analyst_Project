@@ -1,0 +1,30 @@
+# Columns of each dataset
+    # print("dataset mental health columns\n", df_mh.columns)
+    # print(len(df_mh.columns))
+    # print("dataset attrition columns\n", df_attrition.columns)
+
+    # Unique job roles 
+    # print('mental health dataset jobs\n', df_mh['Employee Type'].unique())
+    # print('attrition dataset jobs\n', df_attrition['JobRole'].unique())
+
+    # mh_unique = df_mh['Employee Type'].unique()
+    # attrition_unique = df_attrition['JobRole'].unique()
+    
+    #mh_unique x attrition_unique
+    # job_header_similarity_matrix = [[0 for _ in range(len(mh_unique))]] 
+
+    # print(find_similarities('Pediatric Nurse','Laboratory Technician'))
+
+    # print(LCS('abcde','ace'))
+    # print(df_attrition['Department'].unique())
+
+
+    # Step 3 set reference date SUCKS
+
+    for _,emp in employee_list.iterrows():
+        mgr_id = emp['ManagerID']
+        years = emp['YearsWithCurrManager']
+        for manager in manager_pool:
+            if manager['ManagerID'] == mgr_id:
+                current_max = manager.get('MaxYears', 0)
+                manager['MaxYears'] = max(current_max,years)
