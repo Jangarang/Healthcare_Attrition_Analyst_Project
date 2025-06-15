@@ -1,4 +1,4 @@
-id_serial = 'id SERIAL PRIMARY KEY'
+id_serial = 'SERIAL PRIMARY KEY'
 
 marital_status_enum_name = 'marital_status_enum'
 satisfaction_enum_name = 'satisfaction_enum'
@@ -13,6 +13,14 @@ shift = ['Morning', 'Afternoon', 'Evening', 'Graveyard']
 business_travel = ['Non_Travel', 'Travel_Frequently', 'Travel_Rarely']
 
 # === table schemas ===
+
+def basic_schema(kkey,ttype):
+    basic_schema = {
+        'id': id_serial,
+        kkey: ttype
+    }
+    return basic_schema
+
 education_schema = {
     'id': id_serial,
     'education_level': 'INTEGER',
@@ -25,15 +33,15 @@ employee_schema = {
     'marital_status': 'marital_status_enum',
     'employment_start_date': 'DATE',
     'distance_from_home': 'INTEGER', 
-    'job_title_id': 'INTEGER REFERENCES job_title(id)',
+    'job_role_id': 'INTEGER REFERENCES job_role(id)',
     'department_id': 'INTEGER REFERENCES department(id)',
     'gender_id': 'INTEGER REFERENCES gender(id)',
     'education_id': 'INTEGER REFERENCES education(id)'
 }
 
-job_title_history_schema = {
+job_role_history_schema = {
     'id': id_serial,
-    'job_title_id': 'INTEGER REFERENCES job_title(id)',
+    'job_role_id': 'INTEGER REFERENCES job_role(id)',
     'employee_id': 'INTEGER REFERENCES employee(id)',
     'start_date': 'DATE'
 }

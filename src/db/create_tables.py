@@ -1,5 +1,6 @@
 from db.connect import cursor, conn
 from db.schemas import *
+
 def create_table(table_name,schema_dict=None,*args):
     """
     """
@@ -10,18 +11,6 @@ def create_table(table_name,schema_dict=None,*args):
     return f"CREATE TABLE IF NOT EXISTS {table_name} ({columns});"
 
 # === Leaf Tables ===
-def create_job_title_table():
-    """
-    Creates the 'job_title' table.
-    This is a lookup table containing the job titles.
-    """
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS job_title (
-            id SERIAL PRIMARY KEY,
-            occupation_name TEXT
-        );
-    """)
-
 def create_department_table():
     """
     Creates the 'department' table.
@@ -309,4 +298,6 @@ def create_relational_tables():
 def create_tables():
     """
     """
-# def create_table(table_name,schema_dict=None,*args):
+    # def create_table(table_name,schema_dict=None,*args):
+    cursor.execute(create_table('job_role',basic_schema('job_role','TEXT'))) #TODO create a variable
+    conn.commit()

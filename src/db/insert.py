@@ -1,32 +1,30 @@
 from db.connect import cursor, conn
-from itertools import product
 from utils.string_utils import *
+
+from db.generate_table_data import *
+
 # === ===
-def generate_table_values(df, columns_db,  prefix="ID", just_ids=False):
-    """
-    """ 
-    unique_list = [
-        [val.item() if hasattr(val, "item") else val for val in df[snake_to_pascal(col)].unique()]
-        for col in columns_db
-    ]
-    # print('uniquelist:', unique_list)
-    combos = list(product(*unique_list))
-
-    # print('combos:', combos)
-
-    if just_ids:
-        return [f"{prefix}{i}" for i in range(1, len(combos) + 1)]
-
-    result = []
-    
-    for i, combo in enumerate(combos, start=1):
-        entry = {"id": f"{prefix}{i}"}
-        entry.update(dict(zip(columns_db, combo))) # Creates two seperate dictionaries 
-        result.append(entry)
-   
-    return result
     
 #
+def insert_lookup_table(df, table_name, columns_db, prefix="ID"):
+    """
+    Args:
+    - table_name(string): Name of table 
+    - columns_db(list[string]): Names of relevant columns 
+    """
+    columns_str = ', '.join(columns_db)
+    # print(columns_str)    
+    data = generate_lookup_table_values(df, columns_db, prefix) # [{},{}]
+    data_length_tuple = len(data[0])
+    placeholders = ', '.join(['%s'] * data_length_tuple)
+    values_tuple = [tuple(d.values()) for d in data] 
+
+    query = f"INSERT INTO {table_name} (id, {columns_str}) VALUES ({placeholders})"
+
+    cursor.executemany(query, values_tuple)
+
+    conn.commit() 
+
 def insert_into_employee_table(df):
     """
     Insert data into employee table.
@@ -44,11 +42,7 @@ def insert_into_employee_table(df):
     placeholders = ', '.join(['%s'] * len(df.columns))
     # query = f"INSERT INTO {}"
  
-
-
 # === Helper Functions ===
 def insert_into_department_table(df):
     """
     """
-
-

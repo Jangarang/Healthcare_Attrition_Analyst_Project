@@ -2,11 +2,10 @@ from db.connect import conn
 from db.create_tables import *
 from db.delete_tables import reset_database
 from data_loaders.read_excel import load_excel, create_excel_obj
-from data_loaders.read_sav import create_sav_object
 from data_loaders.read_csv import create_csv
 from fake_data_generators.EmployeeDateGenerator import EmployeeDateGenerator
 from db.insert import *
-
+from db.generate_table_data import *
 import os
 import pandas as pd
 import random
@@ -63,18 +62,23 @@ def main():
 
     generator = EmployeeDateGenerator(df_attrition)
     generator.run()
-
-    print(generator.get_fake_managers_start_dates())
-
-    print(insert_into_employee_table(df_attrition))
-    print(generate_table_values(df_attrition,['education', 'education_field'], prefix='EDU'))
-    print(create_table('hello',{'id': 'SERIAL PRIMARY KEY','birthdate': 'DATE'}))
+    # print(generator.get_fake_managers_start_dates())
+    
+    
+    # print(create_table('hello',{'id': 'SERIAL PRIMARY KEY','birthdate': 'DATE'}))
     # print(create_enum_table('hello',['Married','Single'])) 
-    create_enum_tables()
-    # Create tables 
-    #create_tables()
-    #reset_database()
+    # create_enum_tables()
+    
+    # ===== /db =====
 
+    # === create&resest db ===
+
+    create_tables()
+    # reset_database()
+    # === TESTING db/insert.py ===
+    # print(insert_into_employee_table(df_attrition))
+    # print(generate_table_values(df_attrition,['education', 'education_field'], prefix='EDU'))
+    insert_lookup_table(df_attrition, 'job_role', ['job_role'])
 
 if __name__ == "__main__":
     main()
