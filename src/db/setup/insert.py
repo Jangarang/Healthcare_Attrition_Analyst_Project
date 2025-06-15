@@ -1,7 +1,7 @@
 from db.connect import cursor, conn
 from utils.string_utils import *
 
-from db.generate_table_data import *
+from db.setup.generate_table_data import *
 
 # === ===
     

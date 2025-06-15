@@ -1,11 +1,11 @@
 from db.connect import conn
-from db.create_tables import *
+from db.setup.create_tables import *
 from db.delete_tables import reset_database
 from data_loaders.read_excel import load_excel, create_excel_obj
 from data_loaders.read_csv import create_csv
 from fake_data_generators.EmployeeDateGenerator import EmployeeDateGenerator
-from db.insert import *
-from db.generate_table_data import *
+from db.setup.insert import *
+from db.setup.generate_table_data import *
 import os
 import pandas as pd
 import random
@@ -49,6 +49,7 @@ def csv_viewer(path):
     
     # print(df.head())
     # print(df.columns.str.strip())
+ 
 
 '''
 Entry Point 

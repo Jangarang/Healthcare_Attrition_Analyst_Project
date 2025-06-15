@@ -8,21 +8,14 @@ def create_table(table_name,schema_dict=None,*args):
         return ''
     
     columns = ', '.join(f"{col} {dtype}" for col, dtype in schema_dict.items()) 
-    return f"CREATE TABLE IF NOT EXISTS {table_name} ({columns});"
+    
+    try:
+        cursor.execute(f"CREATE TABLE IF NOT EXISTS {table_name} ({columns});")
+        return True
+    except:
+        return False
 
 # === Leaf Tables ===
-def create_department_table():
-    """
-    Creates the 'department' table.
-    This is a lookup table containing all departments.
-    """
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS department (
-            id SERIAL PRIMARY KEY,
-            department_name TEXT
-        );
-    """)
-
 def create_education_table():
     """
     Creates the 'education' table.
@@ -47,10 +40,17 @@ def create_gender_table():
 """)
 
 def create_leaf_tables():
-    create_job_title_table()
-    create_department_table()
-    create_education_table()
-    create_gender_table()
+    # Create job_role table
+    if create_table('job_role',basic_schema('job_role','TEXT')) == False:#TODO create a variable
+        print('create_leaf_tables error job_role table')
+    # Create education_table
+    if create_table('education', education_schema) == False:
+        print('create_leaf_tables() error education table')
+    # Create gender_table
+    if create_table('gender', basic_schema('gender', 'TEXT')) == False:
+        print('create_leaf_tables() error gender table')
+
+# === Enums ===
 
 def create_enum_table(table_name, schema_enum_list=None):
     """
@@ -79,58 +79,6 @@ def create_enum_tables():
     cursor.execute(create_enum_table(shift_enum_name, shift))
     cursor.execute(create_enum_table(business_travel_enum_name, business_travel))
     conn.commit()
-# === Enums ===
-# def create_enum_tables():
-#     """
-#     Creates custom ENUMS types for:
-#     - marital_status_enum
-#     - satisfaction_enum
-#     - shift_enum
-#     """
-
-#     # Marital Status
-#     cursor.execute("""
-#         DO $$
-#         BEGIN
-#             IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'marital_status_enum') THEN
-#                 CREATE TYPE marital_status_enum AS ENUM ('Married', 'Single', 'Divorced');
-#             END IF;
-#         END
-#         $$;
-#     """)
-
-#     # Statisfaction 
-#     cursor.execute("""
-#         DO $$
-#         BEGIN
-#             IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'satisfaction_enum') THEN
-#                 CREATE TYPE satisfaction_enum AS ENUM ('Environment','Job','Relationship');
-#             END IF;
-#         END
-#         $$;
-#     """) 
-
-#     # Shift 
-#     cursor.execute("""
-#         DO $$
-#         BEGIN
-#             IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'shift_type_enum') THEN
-#             CREATE TYPE shift_type_enum AS ENUM ('Morning','Afternoon','Evening','Graveyard');
-#             END IF;
-#         END
-#         $$;
-#     """)
-
-#     # Business Travel
-#     cursor.execute("""
-#         DO $$
-#         BEGIN
-#             IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'business_travel_enum') THEN
-#                 CREATE TYPE business_travel_enum AS ENUM ('Non_Travel','Travel_Frequently','Travel_Rarely');
-#             END IF;
-#         END
-#         $$;
-#     """)
 
 # === Core Table ===
 def create_employees():
@@ -299,5 +247,5 @@ def create_tables():
     """
     """
     # def create_table(table_name,schema_dict=None,*args):
-    cursor.execute(create_table('job_role',basic_schema('job_role','TEXT'))) #TODO create a variable
+    create_leaf_tables()  
     conn.commit()

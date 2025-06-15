@@ -6,14 +6,12 @@ shift_enum_name = 'shift_enum'
 business_travel_enum_name = 'business_travel_enum'
 
 # === table enums ===
-
 marital_status = ['Married', 'Single', 'Divorced']
 satisfaction = ['Environment', 'Job', 'Relationship']
 shift = ['Morning', 'Afternoon', 'Evening', 'Graveyard']
 business_travel = ['Non_Travel', 'Travel_Frequently', 'Travel_Rarely']
 
 # === table schemas ===
-
 def basic_schema(kkey,ttype):
     basic_schema = {
         'id': id_serial,
@@ -21,12 +19,14 @@ def basic_schema(kkey,ttype):
     }
     return basic_schema
 
+# === Leaf Schemas
 education_schema = {
     'id': id_serial,
     'education_level': 'INTEGER',
     'education_field': 'TEXT'
 }
 
+# === Core Table ===
 employee_schema = {
     'id': id_serial,
     'birthdate': 'DATE',
@@ -39,6 +39,7 @@ employee_schema = {
     'education_id': 'INTEGER REFERENCES education(id)'
 }
 
+# === Relation Tables ===
 job_role_history_schema = {
     'id': id_serial,
     'job_role_id': 'INTEGER REFERENCES job_role(id)',
@@ -48,6 +49,7 @@ job_role_history_schema = {
 
 satisfaction_schema = {
     'id': id_serial,
+    'employee_id': 'INTEGER REFERENCES employee(id)',
     'type': 'satisfaction_enum',
     'score': 'INTEGER'
 }
@@ -85,4 +87,11 @@ create_salary_adjustment_table = {
     'id': id_serial,
     'salary_payment_id': 'INTEGER REFERENCES salary_payment(id)',
     'adjustment_amount': 'INTEGER'
+}
+
+
+department_schema = {
+    'id': id_serial,
+    'manager_id': 'INTEGER REFERENCES employee(id)',
+    'department_name': 'TEXT'
 }
