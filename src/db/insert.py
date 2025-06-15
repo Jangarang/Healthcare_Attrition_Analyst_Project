@@ -9,9 +9,11 @@ def generate_table_values(df, columns_db,  prefix="ID", just_ids=False):
         [val.item() if hasattr(val, "item") else val for val in df[snake_to_pascal(col)].unique()]
         for col in columns_db
     ]
-
+    # print('uniquelist:', unique_list)
     combos = list(product(*unique_list))
-    
+
+    # print('combos:', combos)
+
     if just_ids:
         return [f"{prefix}{i}" for i in range(1, len(combos) + 1)]
 
@@ -19,9 +21,9 @@ def generate_table_values(df, columns_db,  prefix="ID", just_ids=False):
     
     for i, combo in enumerate(combos, start=1):
         entry = {"id": f"{prefix}{i}"}
-        entry.update(dict(zip(columns_db, combo)))
+        entry.update(dict(zip(columns_db, combo))) # Creates two seperate dictionaries 
         result.append(entry)
-    print(result) 
+   
     return result
     
 #

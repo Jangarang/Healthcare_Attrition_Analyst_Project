@@ -1,5 +1,5 @@
 from db.connect import conn
-from db.create_tables import create_tables
+from db.create_tables import *
 from db.delete_tables import reset_database
 from data_loaders.read_excel import load_excel, create_excel_obj
 from data_loaders.read_sav import create_sav_object
@@ -64,49 +64,13 @@ def main():
     generator = EmployeeDateGenerator(df_attrition)
     generator.run()
 
-
-    # print(generator.get_fake_managers())
-    # print(generator.get_employee_and_manager())
     print(generator.get_fake_managers_start_dates())
 
     print(insert_into_employee_table(df_attrition))
-    generate_table_values(df_attrition,['education', 'education_field'], prefix='EDU')
-    # Step 5 Generate manager start dates based on that 
-     
-    # for index,emp in employee_list.iterrows():
-    #     years_at_company = emp['YearsAtCompany']
-    #     years_with_mgr = emp['YearsWithCurrManager']
-    #     years_in_role = float(emp['YearsInCurrentRole'])
-
-    #     # Add some realism/randomness
-    #     buffer_company = random.randint(0, 60)
-    #     buffer_mgr = random.randint(0, 30)
-    #     buffer_role = random.randint(0, 30)
-
-    #     # Start date at company
-    #     start_offset_days = int(years_at_company * 365) + buffer_company
-    #     start_date = reference_date - timedelta(days=start_offset_days)
-    #     start_with_role = reference_date - timedelta(days=int(years_in_role * 365 + buffer_role))
-
-    #     # If employee left create end date
-    #     if (emp['Attrition'] == 'Yes'):
-    #         end_date = start_date + timedelta(days=years_at_company)
-    #         employee_list.loc[index,'EndDate'] = end_date.strftime("%Y-%m-%d")
-
-    #     # Start date with manager
-    #     mgr_offset_days = int(years_with_mgr * 365) + buffer_mgr
-    #     start_with_mgr = reference_date - timedelta(days=mgr_offset_days)
-
-    #     start_with_mgr = max(start_with_mgr, start_date)
-    #     start_with_role = max(start_with_role, start_date)
-
-    #     # Final result
-    #     employee_list.loc[index,'StartDate'] = start_date.strftime("%Y-%m-%d")
-    #     employee_list.loc[index,'StartDateWithManager'] = start_with_mgr.strftime("%Y-%m-%d")
-    #     employee_list.loc[index,'StartDateWithCurrentRole'] = start_with_role.strftime("%Y-%m-%d")
-    
-    # Step 6 Generate birthdates of 
-
+    print(generate_table_values(df_attrition,['education', 'education_field'], prefix='EDU'))
+    print(create_table('hello',{'id': 'SERIAL PRIMARY KEY','birthdate': 'DATE'}))
+    # print(create_enum_table('hello',['Married','Single'])) 
+    create_enum_tables()
     # Create tables 
     #create_tables()
     #reset_database()
